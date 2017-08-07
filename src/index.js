@@ -9,13 +9,13 @@
   export function gt(a, b) {
     a = _validateAndClean(a)
     b = _validateAndClean(b)
-    return _greaterThan(a, b)
+    return _compareSize(a, b, 'greaterThan')
   }
 
   export function lt(a, b) {
     a = _validateAndClean(a)
     b = _validateAndClean(b)
-    return _lessThan(a, b)
+    return _compareSize(a, b, 'lessThan')
   }
 
   export function eq(a, b) {
@@ -36,12 +36,24 @@
     return !eq(a,b)
   }
 
-  function _greaterThan(a, b) {
+  function _compareSize(a, b, type) {
     let index = 0
+    return _compare(a, b)
+    
     function _compare(a, b) {
       let aa = a[index]
       let bb = b[index]
-      if (aa > bb) {
+      let expression
+      switch(type) {
+        case 'greaterThan': 
+          expression = aa > bb
+          break
+        case 'lessThan': 
+          expression = aa < bb
+          break
+      }
+
+      if (expression) {
         return true
       } else if ( aa === bb ){
         index ++
@@ -54,28 +66,6 @@
       }
     }
 
-    return _compare(a, b)
-  }
-
-  function _lessThan(a, b) {
-    let index = 0
-    function _compare(a, b) {
-      let aa = a[index]
-      let bb = b[index]
-      if (aa < bb) {
-        return true
-      } else if ( aa === bb ){
-        index ++
-        if (index === 3) {
-          return false
-        }
-        return _compare(a, b)
-      } else {
-        return false
-      }
-    }
-
-    return _compare(a, b)
   }
 
   function _validateAndClean(data) {
