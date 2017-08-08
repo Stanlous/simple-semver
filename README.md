@@ -25,7 +25,21 @@ $ npm install simple-semver --save
 ## Usage
 
 ```js
-const simple_semver = require('simple-semver')
+const simpleSemver = require('simple-semver')
+
+simpleSemver.gt('1.3.0', '1.1.0') // true (gt means greater than)
+simpleSemver.lt('1.1.0', '1.5.0') // true (lt means less than)
+
+simpleSemver.gte('1.3.0', '1.1.0') // true (gte means greater than or equal)
+simpleSemver.gte('1.3.0', '1.3.0') // true 
+simpleSemver.gte('1.1.0', '1.3.0') // false
+
+simpleSemver.lte('1.1.0', '1.3.0') // true (lte means less than or equal)
+simpleSemver.lte('1.3.0', '1.3.0') // true 
+simpleSemver.lte('1.3.0', '1.1.0') // false
+
+simpleSemver.lt('1.1.0-alpha', '1.5.0') // true ('-alpha' will be ignore)
+
 ```
 
 ## License
