@@ -7,21 +7,24 @@
 // })(this, function() {
 
   export function gt(a, b) {
-    a = _validateAndClean(a)
-    b = _validateAndClean(b)
-    return _compareSize(a, b, 'greaterThan')
+    if(!_validate(a, b)) {
+      return false
+    }
+    return _compareSize(_clean(a), _clean(b), 'greaterThan')
   }
 
   export function lt(a, b) {
-    a = _validateAndClean(a)
-    b = _validateAndClean(b)
-    return _compareSize(a, b, 'lessThan')
+    if(!_validate(a, b)) {
+      return false
+    }
+    return _compareSize(_clean(a), _clean(b), 'lessThan')
   }
 
   export function eq(a, b) {
-    a = _validateAndClean(a)
-    b = _validateAndClean(b)
-    return a.join('.') === b.join('.')
+    if(!_validate(a, b)) {
+      return false
+    }
+    return _clean(a).join('.') === _clean(b).join('.')
   }
 
   export function gte(a, b) {
@@ -33,7 +36,30 @@
   }
 
   export function neq(a, b) {
+    if(!_validate(a, b)) {
+      return false
+    }
     return !eq(a,b)
+  }
+
+  export function validate(data) {
+    if (typeof data !== 'string') {
+      // throw TypeError('Invalid Type: params should be string')
+      return false
+    }
+    data = data.replace(/-alpha/g, '')
+    const arr = data.split('.')
+    if (arr.length !== 3) {
+      // throw TypeError('Invalid Type: params\'s format should be x.x.x')
+      return false
+    }
+    const pass = arr.every((el) => {
+      // if (!/^[0-9]+$/.test(el)) {
+      //   throw TypeError('Invalid Type: params should only contain Number and dot(.)')
+      // }
+      return /^[0-9]+$/.test(el)
+    })
+    return pass
   }
 
   function _compareSize(a, b, type) {
@@ -68,28 +94,10 @@
 
   }
 
-  function _validateAndClean(data) {
-    _validate(data)
-    return _clean(data)
+  function _validate(a, b) {
+    return validate(a) && validate(b)
   }
-
-  function _validate(data) {
-    if (typeof data !== 'string') {
-      throw TypeError('Invalid Type: params should be string')
-    }
-    data = data.replace(/-alpha/g, '')
-    const arr = data.split('.')
-    if (arr.length !== 3) {
-      throw TypeError('Invalid Type: params\'s format should be x.x.x')
-    }
-    arr.forEach((el) => {
-      if (!/^[0-9]+$/.test(el)) {
-        throw TypeError('Invalid Type: params should only contain Number and dot(.)')
-      }
-    })
-    return true
-  }
-
+  
   function _clean(data) {
     return data.replace(/-alpha/g, '').split('.').map(Number)
   }

@@ -27,6 +27,11 @@ $ npm install simple-semver --save
 ```js
 const simpleSemver = require('simple-semver')
 
+simpleSemver.validate('1.3.0') // true
+simpleSemver.validate('a.b.0') // false
+simpleSemver.validate('1.0')   // false
+// simple-semver only support xx.xx.xx(only contain Number and dot(.)) temporarily
+
 simpleSemver.gt('1.3.0', '1.1.0') // true (gt means greater than)
 simpleSemver.lt('1.1.0', '1.5.0') // true (lt means less than)
 
