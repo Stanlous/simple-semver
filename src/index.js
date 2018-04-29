@@ -10,89 +10,108 @@
     if(!_validate(a, b)) {
       return false
     }
-    return _compareSize(_clean(a), _clean(b), 'greaterThan')
+    return _cleanCompare(a, b) === 'GT'
   }
 
   export function lt(a, b) {
     if(!_validate(a, b)) {
       return false
     }
-    return _compareSize(_clean(a), _clean(b), 'lessThan')
+    return _cleanCompare(a, b) === 'LT'
   }
 
   export function eq(a, b) {
     if(!_validate(a, b)) {
       return false
     }
-    return _clean(a).join('.') === _clean(b).join('.')
+    return _cleanCompare(a, b) === 'EQ'
   }
 
   export function gte(a, b) {
-    return gt(a,b) || eq(a,b) 
+    if(!_validate(a, b)) {
+      return false
+    }
+    const result = _cleanCompare(a, b)
+    return result === 'GT' || result === 'EQ' 
   }
 
   export function lte(a, b) {
-    return lt(a,b) || eq(a,b) 
+    if(!_validate(a, b)) {
+      return false
+    }
+    const result = _cleanCompare(a, b)
+    return result === 'LT' || result === 'EQ' 
   }
 
   export function neq(a, b) {
     if(!_validate(a, b)) {
       return false
     }
-    return !eq(a,b)
+    return _cleanCompare(a, b) !== 'EQ'
   }
 
   export function validate(data) {
     if (typeof data !== 'string') {
-      // throw TypeError('Invalid Type: params should be string')
       return false
     }
     data = data.replace(/-alpha/g, '')
     const arr = data.split('.')
     if (arr.length !== 3) {
-      // throw TypeError('Invalid Type: params\'s format should be x.x.x')
       return false
     }
     const pass = arr.every((el) => {
-      // if (!/^[0-9]+$/.test(el)) {
-      //   throw TypeError('Invalid Type: params should only contain Number and dot(.)')
-      // }
       return /^[0-9]+$/.test(el)
     })
     return pass
   }
 
-  function _compareSize(a, b, type) {
-    let index = 0
-    return _compare(a, b)
-    
-    function _compare(a, b) {
-      let aa = a[index]
-      let bb = b[index]
-      let expression
-      switch(type) {
-        case 'greaterThan': 
-          expression = aa > bb
-          break
-        case 'lessThan': 
-          expression = aa < bb
-          break
-      }
+  function _cleanCompare (a, b) {
+    return _compareVersion(_clean(a), _clean(b))
+  }
 
-      if (expression) {
-        return true
-      } else if ( aa === bb ){
-        index ++
-        if (index === 3) {
-          return false
-        }
-        return _compare(a, b)
-      } else {
-        return false
+  function _compare (a, b) {
+    return a === b
+      ? 'EQ'
+      : a > b
+        ? 'GT'
+        : 'LT'
+  }
+
+  function _compareVersion (a, b) {
+    if (a.join('.') === b.join('.')) {
+      return 'EQ'
+    }
+
+    for(let i = 0; i < a.length; i++) {
+      let result = _compare(a[i], b[i])
+      switch (result) {
+        case 'EQ':
+          continue
+          break
+        case 'GT':
+          return 'GT'
+        case 'LT':
+          return 'LT'
       }
     }
 
+    // let a = [1,2,3]
+    // for(let i = 0; i< a.length; i++) {
+    //   switch (i) {
+    //     case 1:
+    //       continue
+    //       break
+    //     case 0:
+    //       console.log('----0')
+    //       break
+    //     default:
+    //       console.log('----default')
+    //   }
+    //   console.log(i)
+    // }
   }
+
+
 
   function _validate(a, b) {
     return validate(a) && validate(b)
