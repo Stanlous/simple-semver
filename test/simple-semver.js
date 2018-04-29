@@ -3,30 +3,14 @@ import test from 'ava'
 
 // invalid type
 for (let key in simpleSemver) {
-  test(`Invalid type in function ${key}`, (t) => {
+  test(`Invalid params in function ${key}`, (t) => {
     const fn = simpleSemver[key]
     t.is(fn(1, 2), false)
-  })
-}
-
-for (let key in simpleSemver) {
-  test(`Invalid type in function ${key}`, (t) => {
-    const fn = simpleSemver[key]
     t.is(fn('1', '2'), false)
-  })
-}
-
-for (let key in simpleSemver) {
-  test(`Invalid type in function ${key}`, (t) => {
-    const fn = simpleSemver[key]
     t.is(fn('1.1', '2.2'), false)
-  })
-}
-
-for (let key in simpleSemver) {
-  test(`Invalid type in function ${key}`, (t) => {
-    const fn = simpleSemver[key]
     t.is(fn('1.1.1.1', '2.2.2.2'), false)
+    t.is(fn('1.1', '2.2.2'), false)
+    t.is(fn('1.1. 1', '2.2.2'), false)
   })
 }
 

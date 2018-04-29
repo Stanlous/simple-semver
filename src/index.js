@@ -65,6 +65,8 @@
     return pass
   }
 
+  
+
   function _cleanCompare (a, b) {
     return _compareVersion(_clean(a), _clean(b))
   }
@@ -94,24 +96,7 @@
           return 'LT'
       }
     }
-
-    // let a = [1,2,3]
-    // for(let i = 0; i< a.length; i++) {
-    //   switch (i) {
-    //     case 1:
-    //       continue
-    //       break
-    //     case 0:
-    //       console.log('----0')
-    //       break
-    //     default:
-    //       console.log('----default')
-    //   }
-    //   console.log(i)
-    // }
   }
-
-
 
   function _validate(a, b) {
     return validate(a) && validate(b)
