@@ -1,6 +1,6 @@
 {
   "name": "simple-semver",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "simple-semver",
   "main": "lib/index.js",
   "module": "src/index.js",
