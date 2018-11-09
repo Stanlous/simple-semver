@@ -47,6 +47,12 @@ simpleSemver.lt('1.1.0-alpha', '1.5.0') // true ('-alpha' will be ignore)
 
 ```
 
+## Test
+
+```sh
+$ npm run test
+```
+
 ## License
 
 MIT
